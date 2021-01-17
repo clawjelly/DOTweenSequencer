@@ -14,5 +14,11 @@ public abstract class DOTweenBaseAction : ScriptableObject
     #endif
     #endregion
     
+    /**
+     * <summary>
+     * Adds the action to a DOTween-sequence
+     * </summary>
+     * <param name="seq"></param>
+     */
     public abstract void addToSequence(Sequence seq);
 }

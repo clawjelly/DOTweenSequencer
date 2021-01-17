@@ -6,6 +6,7 @@ using DG.Tweening;
 
 public class DOTweenRotate : DOTweenBaseAction
 {
+    #region public
     [SerializeField]
     private GameObject actor = null;
     [SerializeField]
@@ -17,7 +18,12 @@ public class DOTweenRotate : DOTweenBaseAction
     [SerializeField]
     private bool relative = false;
     [SerializeField]
+    private bool doReset = true;
+    [SerializeField]
     private Ease ease = Ease.Linear;
+    #endregion
+
+    private Quaternion startRotation;
 
 
 #if UNITY_EDITOR
@@ -31,23 +37,36 @@ public class DOTweenRotate : DOTweenBaseAction
         starttime = EditorGUILayout.FloatField("Start Time", starttime);
         duration = EditorGUILayout.FloatField("Duration", duration);
         ease = (Ease)EditorGUILayout.EnumPopup("Ease Type", ease);
-        string rel = relative ? "Parent" : "World";
-        relative = EditorGUILayout.Toggle("Relative Rotation", relative);
+        // string rel = relative ? "Parent" : "World";
         rotation = EditorGUILayout.Vector3Field("Rotation", rotation);
+        relative = EditorGUILayout.Toggle("Relative Rotation", relative);
+        doReset = EditorGUILayout.Toggle("Reset on Complete", doReset);
         EditorGUILayout.EndVertical();
     }
 #endif
 
     public override void addToSequence(Sequence seq)
     {
+        if (doReset) startRotation = actor.transform.rotation;
         if (actor==null) return;
         if (relative)
             seq.Insert(starttime, actor.transform
                 .DOLocalRotate(rotation, duration, RotateMode.FastBeyond360)
-                .SetEase(ease));
+                .SetEase(ease)
+                .OnComplete(reset));
         else
             seq.Insert(starttime, actor.transform
                 .DORotate(rotation, duration, RotateMode.FastBeyond360)
-                .SetEase(ease));
+                .SetEase(ease)
+                .OnComplete(reset));
+    }
+
+    public void reset()
+    {
+        if (doReset)
+        {
+            // Debug.Log($"Resetting rotation for {actor.name} to {startRotation}.");
+            actor.transform.rotation = startRotation;
+        }
     }
 }

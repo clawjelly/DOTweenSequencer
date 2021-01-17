@@ -5,12 +5,16 @@ using DG.Tweening;
 
 public class DOTweenSequencer : MonoBehaviour
 {
-    // [SerializeField]
     public List<DOTweenBaseAction> actions = new List<DOTweenBaseAction>();
 
+    /**
+     * <summary>
+     * Plays the sequence.
+     * </summary>
+     */
     public void Play()
     {
-        Debug.Log("Starting Sequence");
+        Debug.Log($"Starting Sequence for {gameObject.name}");
         Sequence sequence = DOTween.Sequence();
         foreach (DOTweenBaseAction action in actions)
         {
