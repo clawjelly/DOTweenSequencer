@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class DOTweenSequencer : MonoBehaviour
+namespace DOTweenSequencer
 {
-    public List<DOTweenBaseAction> actions = new List<DOTweenBaseAction>();
-
-    /**
-     * <summary>
-     * Plays the sequence.
-     * </summary>
-     */
-    public void Play()
+    public class DOTweenSequencer : MonoBehaviour
     {
-        Debug.Log($"Starting Sequence for {gameObject.name}");
-        Sequence sequence = DOTween.Sequence();
-        foreach (DOTweenBaseAction action in actions)
+        [SerializeField]
+        public List<DOTweenAction> actions = new List<DOTweenAction>();
+
+        /**
+        * <summary>
+        * Plays the sequence.
+        * </summary>
+        */
+        public void Play()
         {
-            action.addToSequence(sequence);
+            Debug.Log($"Starting Sequence for {gameObject.name}");
+            Sequence sequence = DOTween.Sequence();
+            foreach (DOTweenAction action in actions)
+            {
+                action.addToSequence(sequence);
+            }
         }
     }
 }
